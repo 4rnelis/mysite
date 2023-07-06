@@ -1,5 +1,8 @@
 package com.arno.mysite.chess.game;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 
 public class Board {
@@ -18,7 +21,13 @@ public class Board {
 
     private int turn;
 
-    public Board() {
+    private boolean enPassant;
+    private boolean castling;
+    private boolean pawnCrossed;
+
+    Reader bufferedReader;
+
+    public Board(Reader reader) {
         this.pieces = new ArrayList<>();
         boardPlacement = new Piece[WIDTH][HEIGHT];
         createPieces();
@@ -31,6 +40,8 @@ public class Board {
         this.whiteMated = false;
 
         this.turn = 0;
+
+        bufferedReader = new BufferedReader(reader);
     }
 
     /**
@@ -75,6 +86,11 @@ public class Board {
         blackMated = isMated('B');
         whiteChecked = isChecked('W');
         whiteMated = isMated('W');
+
+        System.out.println("BC: " + blackChecked);
+        System.out.println("BM: " + blackMated);
+        System.out.println("WC: " + whiteChecked);
+        System.out.println("WM: " + whiteMated);
 
         turn++;
         System.out.println(turn);
@@ -125,23 +141,61 @@ public class Board {
      * @param force selects whether to do condition checks
      */
     public void setPiece(int currentX, int currentY, int newX, int newY, boolean force) {
+
+        //FLAGS
+        enPassant = false;
+        boolean tempPassant;
+        castling = false;
+        boolean tempCastling;
+        pawnCrossed = false;
+        boolean tempPawnCrossed;
+
         for (Piece piece : pieces) {
             //piece != null required because of checks
             if (piece != null) {
-                if (piece.getPosX() == currentX && piece.getPosY() == currentY) {
-                    if (force || (!reversed && piece.getRole() == 'W') || (reversed && piece.getRole() == 'B')) {
-                        if (force || determineMoveRules(piece, newX, newY)) {
-                            if (force || !futureMoveChecked(piece, newX, newY)) {
-                                if (getPiece(newX, newY) != null) {
-                                    pieces.set(pieces.indexOf(getPiece(newX, newY)), null);
+                if (piece.getPosX() == currentX && piece.getPosY() == currentY) { //Gets the piece from the array
+                    if (force || (!reversed && piece.getRole() == 'W') || (reversed && piece.getRole() == 'B')) { //Checks player turn
+                        if (force || determineMoveRules(piece, newX, newY)) { //Checks if the piece move corresponds to the rules
+                            tempPassant = enPassant;
+                            tempCastling = castling;
+                            tempPawnCrossed = pawnCrossed;
+                            if (force || castling || !futureMoveChecked(piece, newX, newY)) { //Checks if there is no check after the move
+
+                                //if en Passant is active
+                                if (tempPassant) {
+                                    if (piece.getRole() == 'W') {
+                                        pieces.set(pieces.indexOf(getPiece(newX, newY+1)), null);
+                                    }
+                                    if (piece.getRole() == 'B') {
+                                        pieces.set(pieces.indexOf(getPiece(newX, newY-1)), null);
+                                    }
                                 }
 
-                                piece.setPosX(newX);
-                                piece.setPosY(newY);
+                                //if castling is active
+                                if (tempCastling) {
+                                    doCastling(piece, getPiece(newX, newY));
+                                } else {
+                                    if (getPiece(newX, newY) != null) {
+                                        pieces.set(pieces.indexOf(getPiece(newX, newY)), null);
+                                    }
+
+                                    piece.setPosX(newX);
+                                    piece.setPosY(newY);
+                                }
+
+                                if (tempPawnCrossed) {
+                                    System.out.println("Choose Pawn Promotion!");
+                                    try {
+                                        promotePawn(piece, (char) bufferedReader.read());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
 
                                 if (!force) {
                                     updateBoard();
                                 } else {
+                                    piece.setMoved(true);
                                     updatePlacement();
                                 }
 
@@ -159,6 +213,7 @@ public class Board {
      * Determines if a piece is allowed to move according to rules
      */
     public boolean determineMoveRules(Piece piece, int newX, int newY) {
+
         switch (piece.getName()) {
             case PAWN -> {
                 return pawnMovement(piece, newX, newY);
@@ -670,34 +725,76 @@ public class Board {
         if (piece.getRole() == 'B') {
             if (newX == piece.getPosX()) {
                 //for the first move
-                if (piece.getPosY() == 1) {
+                if (!piece.isMoved()) {
                     if (getPiece(piece.getPosX(), piece.getPosY() + 1) == null //checks if the square in front is empty
                             && (newY == piece.getPosY() + 1 //if chosen to move one tile to the front
                             || getPiece(piece.getPosX(), piece.getPosY() + 2) == null //checks if the square 2 tiles in front is empty
                             && (newY == piece.getPosY() + 2))) //if chosen to move two tiles to the front
                     {
+                        //assigns en Passant to the current turn
+                        if (newY == piece.getPosY() + 2) {
+                            piece.setEnPassant(turn);
+                        }
+                        //Check for pawn promotion
+                        if (newY == Board.HEIGHT-1) {
+                            pawnCrossed = true;
+                        }
                         return true;
                     }
                 }
                 //standard move
                 if (getPiece(piece.getPosX(), piece.getPosY() + 1) == null //checks if the square in front is empty
                         && (newY == piece.getPosY() + 1)) { //if chosen to move one tile to the front
+                    //Check for pawn promotion
+                    if (newY == Board.HEIGHT-1) {
+                        pawnCrossed = true;
+                    }
                     return true;
                 }
             }
             //if taking a piece to the left
             if (!(piece.getPosX() - 1 < 0 || piece.getPosX() - 1 > WIDTH-1) && !(piece.getPosY() + 1 < 0 || piece.getPosY() + 1 > HEIGHT-1)) {
                 if (getPiece(piece.getPosX() - 1, piece.getPosY() + 1) != null //checks if the square in front of the left is populated
-                        && getPiece(piece.getPosX() - 1, piece.getPosY() + 1).getRole() != piece.getRole() //checks if piece is an enemy piece
-                        && (newY == piece.getPosY() + 1) && newX == piece.getPosX() - 1) { //if chosen to move one tile to the front
+                        && (getPiece(piece.getPosX() - 1, piece.getPosY() + 1).getRole() != piece.getRole() //checks if piece is an enemy piece
+                        && (newX == piece.getPosX() - 1 && newY == piece.getPosY() + 1))) { //if chosen to move one tile to the front
+                    //Check for pawn promotion
+                    if (newY == Board.HEIGHT-1) {
+                        pawnCrossed = true;
+                    }
+                    return true;
+                }
+                if (getPiece(piece.getPosX() - 1, piece.getPosY()) != null
+                        && (getPiece(piece.getPosX() - 1, piece.getPosY()).getRole() != piece.getRole() //checks if piece 2 squares in front is an enemy piece
+                        && (getPiece(piece.getPosX() - 1, piece.getPosY()).getEnPassant() != -1 && turn - getPiece(piece.getPosX() - 1, piece.getPosY()).getEnPassant() == 1))  //checks if en Passant is applicable)
+                        && (newX == piece.getPosX() - 1 && newY == piece.getPosY() + 1)) {
+                    enPassant = true;
+                    //Check for pawn promotion
+                    if (newY == Board.HEIGHT-1) {
+                        pawnCrossed = true;
+                    }
                     return true;
                 }
             }
             //if taking a piece to the right
             if (!(piece.getPosX() + 1 < 0 || piece.getPosX() + 1 > WIDTH-1) && !(piece.getPosY() + 1 < 0 || piece.getPosY() + 1 > HEIGHT-1)) {
                 if (getPiece(piece.getPosX() + 1, piece.getPosY() + 1) != null //checks if the square in front of the left is populated
-                        && getPiece(piece.getPosX() + 1, piece.getPosY() + 1).getRole() != piece.getRole() //checks if piece is an enemy piece
-                        && (newY == piece.getPosY() + 1) && newX == piece.getPosX() + 1) { //if chosen to move one tile to the front
+                        && (getPiece(piece.getPosX() + 1, piece.getPosY() + 1).getRole() != piece.getRole() //checks if piece is an enemy piece
+                        && (newX == piece.getPosX() + 1 && newY == piece.getPosY() + 1))) { //if chosen to move one tile to the front
+                    //Check for pawn promotion
+                    if (newY == Board.HEIGHT-1) {
+                        pawnCrossed = true;
+                    }
+                    return true;
+                }
+                if (getPiece(piece.getPosX() + 1, piece.getPosY()) != null
+                        && (getPiece(piece.getPosX() + 1, piece.getPosY()).getRole() != piece.getRole() //checks if piece 2 squares in front is an enemy piece
+                        && (getPiece(piece.getPosX() + 1, piece.getPosY()).getEnPassant() != -1 && turn - getPiece(piece.getPosX() + 1, piece.getPosY()).getEnPassant() == 1))  //checks if en Passant is applicable)
+                        && (newX == piece.getPosX() + 1 && newY == piece.getPosY() + 1)) {
+                    enPassant = true;
+                    //Check for pawn promotion
+                    if (newY == Board.HEIGHT-1) {
+                        pawnCrossed = true;
+                    }
                     return true;
                 }
             }
@@ -706,34 +803,76 @@ public class Board {
         if (piece.getRole() == 'W') {
             if (newX == piece.getPosX()) {
                 //for the first move
-                if (piece.getPosY() == HEIGHT - 2) {
+                if (!piece.isMoved()) {
                     if (getPiece(piece.getPosX(), piece.getPosY() - 1) == null //checks if the square in front is empty
                             && (newY == piece.getPosY() - 1 //if chosen to move one tile to the front
                             || getPiece(piece.getPosX(), piece.getPosY() - 2) == null //checks if the square 2 tiles in front is empty
                             && (newY == piece.getPosY() - 2))) //if chosen to move two tiles to the front
                     {
+                        //assigns en Passant to the current turn
+                        if (newY == piece.getPosY() - 2) {
+                            piece.setEnPassant(turn);
+                        }
+                        //Check for pawn promotion
+                        if (newY == 0) {
+                            pawnCrossed = true;
+                        }
                         return true;
                     }
                 }
                 //standard move
                 if (getPiece(piece.getPosX(), piece.getPosY() - 1) == null //checks if the square in front is empty
                         && (newY == piece.getPosY() - 1)) { //if chosen to move one tile to the front
+                    //Check for pawn promotion
+                    if (newY == 0) {
+                        pawnCrossed = true;
+                    }
                     return true;
                 }
             }
             //if taking a piece to the left
             if (!(piece.getPosX() - 1 < 0 || piece.getPosX() - 1 > WIDTH-1) && !(piece.getPosY() - 1 < 0 || piece.getPosY() - 1 > HEIGHT-1)) {
                 if (getPiece(piece.getPosX() - 1, piece.getPosY() - 1) != null //checks if the square in front of the left is populated
-                        && getPiece(piece.getPosX() - 1, piece.getPosY() - 1).getRole() != piece.getRole() //checks if piece is an enemy piece
-                        && (newY == piece.getPosY() - 1) && newX == piece.getPosX() - 1) { //if chosen to move one tile to the front
+                        && (getPiece(piece.getPosX() - 1, piece.getPosY() - 1).getRole() != piece.getRole() //checks if piece is an enemy piece
+                        && (newX == piece.getPosX() - 1 && newY == piece.getPosY() - 1))) { //if chosen to move one tile to the front
+                    //Check for pawn promotion
+                    if (newY == 0) {
+                        pawnCrossed = true;
+                    }
+                    return true;
+                }
+                if (getPiece(piece.getPosX() - 1, piece.getPosY()) != null
+                        && (getPiece(piece.getPosX() - 1, piece.getPosY()).getRole() != piece.getRole() //checks if piece 2 squares in front is an enemy piece
+                        && (getPiece(piece.getPosX() - 1, piece.getPosY()).getEnPassant() != -1 && turn - getPiece(piece.getPosX() - 1, piece.getPosY()).getEnPassant() == 1))  //checks if en Passant is applicable)
+                        && (newX == piece.getPosX() - 1 && newY == piece.getPosY() - 1)) {
+                    enPassant = true;
+                    //Check for pawn promotion
+                    if (newY == 0) {
+                        pawnCrossed = true;
+                    }
                     return true;
                 }
             }
             //if taking a piece to the right
             if (!(piece.getPosX() + 1 < 0 || piece.getPosX() + 1 > WIDTH-1) && !(piece.getPosY() - 1 < 0 || piece.getPosY() - 1 > HEIGHT-1)) {
                 if (getPiece(piece.getPosX() + 1, piece.getPosY() - 1) != null //checks if the square in front of the left is populated
-                        && getPiece(piece.getPosX() + 1, piece.getPosY() - 1).getRole() != piece.getRole() //checks if piece is an enemy piece
-                        && (newY == piece.getPosY() - 1) && newX == piece.getPosX() + 1) { //if chosen to move one tile to the front
+                        && (getPiece(piece.getPosX() + 1, piece.getPosY() - 1).getRole() != piece.getRole() //checks if piece is an enemy piece
+                        && (newX == piece.getPosX() + 1 && newY == piece.getPosY() - 1))) { //if chosen to move one tile to the front
+                    //Check for pawn promotion
+                    if (newY == 0) {
+                        pawnCrossed = true;
+                    }
+                    return true;
+                }
+                if (getPiece(piece.getPosX() + 1, piece.getPosY()) != null
+                        && (getPiece(piece.getPosX() + 1, piece.getPosY()).getRole() != piece.getRole() //checks if piece 2 squares in front is an enemy piece
+                        && (getPiece(piece.getPosX() + 1, piece.getPosY()).getEnPassant() != -1 && turn - getPiece(piece.getPosX() + 1, piece.getPosY()).getEnPassant() == 1))  //checks if en Passant is applicable)
+                        && (newX == piece.getPosX() + 1 && newY == piece.getPosY() - 1)) {
+                    enPassant = true;
+                    //Check for pawn promotion
+                    if (newY == 0) {
+                        pawnCrossed = true;
+                    }
                     return true;
                 }
             }
@@ -742,10 +881,35 @@ public class Board {
     }
 
     private boolean rookMovement(Piece piece, int newX, int newY) {
+
+        int x, y;
+
         //if horizontal movement
         if ((newX != piece.getPosX() && newY == piece.getPosY())) {
-            int x = piece.getPosX();
-            int y = piece.getPosY();
+            if (piece.getName() != Pieces.QUEEN) {
+                if (getPiece(newX, newY) != null && getPiece(newX, newY).getRole() == piece.getRole() && getPiece(newX, newY).getName() == Pieces.KING
+                        && (!piece.isMoved() && !getPiece(newX, newY).isMoved())) {
+                    x = piece.getPosX();
+                    y = piece.getPosY();
+                    while (x != newX) {
+                        if (x < newX) {
+                            x++;
+                        }
+                        if (x > newX) {
+                            x--;
+                        }
+                        if (((x != newX || y != newY) && getPiece(x, y) != null) || checkIfSquareIsChecked(x, y, piece.getOpposingRole())) {
+                            System.out.println("FALSE");
+                            return false;
+                        }
+                    }
+                    castling = true;
+                    System.out.println("Castling!");
+                    return true;
+                }
+            }
+            x = piece.getPosX();
+            y = piece.getPosY();
             while (x != newX) {
                 if (x < newX) {
                     x++;
@@ -753,7 +917,7 @@ public class Board {
                 if (x > newX) {
                     x--;
                 }
-                if ((x != newX && y != newY) && getPiece(x, y) != null) {
+                if ((x != newX || y != newY) && getPiece(x, y) != null) {
                     return false;
                 }
             }
@@ -764,8 +928,29 @@ public class Board {
         }
         //if vertical movement
         if ((newX == piece.getPosX() && newY != piece.getPosY())) {
-            int x = piece.getPosX();
-            int y = piece.getPosY();
+            if (piece.getName() != Pieces.QUEEN) {
+                if (getPiece(newX, newY) != null && getPiece(newX, newY).getRole() == piece.getRole() && getPiece(newX, newY).getName() == Pieces.KING
+                        && (!piece.isMoved() && !getPiece(newX, newY).isMoved())) {
+                    x = piece.getPosX();
+                    y = piece.getPosY();
+                    while (y != newY) {
+                        if (y < newY) {
+                            y++;
+                        }
+                        if (y > newY) {
+                            y--;
+                        }
+                        if (((x != newX || y != newY) && getPiece(x, y) != null) || checkIfSquareIsChecked(x, y, piece.getOpposingRole())) {
+                            return false;
+                        }
+                    }
+                    castling = true;
+                    System.out.println("Castling!");
+                    return true;
+                }
+            }
+            x = piece.getPosX();
+            y = piece.getPosY();
             while (y != newY) {
                 if (y < newY) {
                     y++;
@@ -773,7 +958,7 @@ public class Board {
                 if (y > newY) {
                     y--;
                 }
-                if ((x != newX && y != newY) && getPiece(x, y) != null) {
+                if ((x != newX || y != newY) && getPiece(x, y) != null) {
                     return false;
                 }
             }
@@ -837,6 +1022,51 @@ public class Board {
     }
 
     private boolean kingMovement(Piece piece, int newX, int newY) {
+        int x, y;
+
+        //Castling movement (same as rook)
+        if (getPiece(newX, newY) != null && getPiece(newX, newY).getRole() == piece.getRole() && getPiece(newX, newY).getName() == Pieces.ROOK
+                && (!piece.isMoved() && !getPiece(newX, newY).isMoved())) {
+            x = piece.getPosX();
+            y = piece.getPosY();
+            while (x != newX) {
+                if (x < newX) {
+                    x++;
+                }
+                if (x > newX) {
+                    x--;
+                }
+                if (((x != newX || y != newY) && getPiece(x, y) != null) || checkIfSquareIsChecked(x, y, piece.getOpposingRole())) {
+                    System.out.println("FALSE");
+                    return false;
+                }
+            }
+            castling = true;
+            System.out.println("Castling!");
+            return true;
+        }
+
+        //Castling movement (same as rook)
+        if (getPiece(newX, newY) != null && getPiece(newX, newY).getRole() == piece.getRole() && getPiece(newX, newY).getName() == Pieces.ROOK
+                && (!piece.isMoved() && !getPiece(newX, newY).isMoved())) {
+            x = piece.getPosX();
+            y = piece.getPosY();
+            while (y != newY) {
+                if (y < newY) {
+                    y++;
+                }
+                if (y > newY) {
+                    y--;
+                }
+                if (((x != newX || y != newY) && getPiece(x, y) != null) || checkIfSquareIsChecked(x, y, piece.getOpposingRole())) {
+                    return false;
+                }
+            }
+            castling = true;
+            System.out.println("Castling!");
+            return true;
+        }
+
         if ((Math.abs(newX - piece.getPosX()) == 1 && Math.abs(newY - piece.getPosY()) == 1) //if moving diagonal
                 || (Math.abs(newX - piece.getPosX()) == 1 && Math.abs(newY - piece.getPosY()) == 0) //if moving horizontal
                 || (Math.abs(newX - piece.getPosX()) == 0 && Math.abs(newY - piece.getPosY()) == 1)) //if moving vertical
@@ -844,6 +1074,50 @@ public class Board {
             return !(getPiece(newX, newY) != null && getPiece(newX, newY).getRole() == piece.getRole());
         }
         return false;
+    }
+
+    public boolean checkIfSquareIsChecked(int x, int y, char role) {
+        for (Piece piece : pieces) {
+            if (piece != null && piece.getRole() == role) {
+                for (Integer[] integers : piece.getCoveredFields()) {
+                    if (x == integers[0] && y == integers[1]) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void doCastling(Piece piece1, Piece piece2) {
+        if (piece1.getName() == Pieces.KING) {
+            if (piece2.getPosX() < piece1.getPosX()) {
+                piece2.setPosX(piece1.getPosX()-1);
+                piece1.setPosX(piece2.getPosX()-1);
+            } else {
+                piece2.setPosX(piece1.getPosX()+1);
+                piece1.setPosX(piece2.getPosX()+1);
+            }
+        } else {
+            if (piece1.getPosX() < piece2.getPosX()) {
+                piece1.setPosX(piece2.getPosX()-1);
+                piece2.setPosX(piece1.getPosX()-1);
+            } else {
+                piece1.setPosX(piece2.getPosX()+1);
+                piece2.setPosX(piece1.getPosX()+1);
+            }
+        }
+        piece1.setMoved(true);
+        piece2.setMoved(true);
+    }
+
+    public void promotePawn(Piece piece, char pieceName) {
+        switch (pieceName) {
+            case 'R' -> piece.setName(Pieces.ROOK);
+            case 'B' -> piece.setName(Pieces.BISHOP);
+            case 'K' -> piece.setName(Pieces.KNIGHT);
+            case 'Q' -> piece.setName(Pieces.QUEEN);
+        }
     }
 
     public Piece[][] getBoardPlacement() {

@@ -1,4 +1,5 @@
 To do:
-1) implement castling
-2) implement en Passant
-3) implement pawn change upon crossing the board
+1) implement castling (setPiece or determine move flags) //DONE!
+2) implement en Passant (setPiece or determine move flags) //DONE!
+3) implement pawn change upon crossing the board //DONE!
+4) implement draw

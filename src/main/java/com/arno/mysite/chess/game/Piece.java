@@ -10,7 +10,7 @@ public class Piece {
     private ArrayList<Integer[]> coveredFields;
 
     private boolean moved;
-    private boolean enPassant;
+    private int enPassant;
 
     public Piece(Pieces name, int posX, int posY, char role) {
         this.name = name;
@@ -19,7 +19,7 @@ public class Piece {
         this.role = role;
         this.coveredFields = new ArrayList<>();
         this.moved = false;
-        this.enPassant = false;
+        this.enPassant = -1;
     }
 
     public Pieces getName() {
@@ -85,11 +85,11 @@ public class Piece {
         this.moved = moved;
     }
 
-    public boolean isEnPassant() {
+    public int getEnPassant() {
         return enPassant;
     }
 
-    public void setEnPassant(boolean enPassant) {
+    public void setEnPassant(int enPassant) {
         this.enPassant = enPassant;
     }
 

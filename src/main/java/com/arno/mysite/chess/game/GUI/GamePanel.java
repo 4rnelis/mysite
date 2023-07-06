@@ -120,15 +120,15 @@ public class GamePanel extends JPanel implements Runnable{
             for (int j = 0; j < Board.HEIGHT; j++) {
                 if (i % 2 == 0) {
                     if (j % 2 == 0) {
-                        drawRow(graphics2D, color2, color1, i, j);
+                        drawRow(graphics2D, color2, i, j);
                     } else {
-                        drawRow(graphics2D, color1, color2, i, j);
+                        drawRow(graphics2D, color1, i, j);
                     }
                 } else {
                     if (j % 2 == 0) {
-                        drawRow(graphics2D, color1, color2, i, j);
+                        drawRow(graphics2D, color1, i, j);
                     } else {
-                        drawRow(graphics2D, color2, color1, i, j);
+                        drawRow(graphics2D, color2, i, j);
                     }
                 }
             }
@@ -166,11 +166,10 @@ public class GamePanel extends JPanel implements Runnable{
      * color1/color2/color1/color2...
      * @param graphics2D != null
      * @param color1 != null
-     * @param color2 != null
      * @param i != null
      * @param j != null
      */
-    public void drawRow(Graphics2D graphics2D, Color color1, Color color2, int i, int j) {
+    public void drawRow(Graphics2D graphics2D, Color color1, int i, int j) {
             graphics2D.setColor(color1);
 //            graphics2D.setColor(color2);
         graphics2D.fillRect(
