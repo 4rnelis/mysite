@@ -1,0 +1,4 @@
+plans for this project:
+1) create functioning multiplayer chess (using sockets)
+2) make an account management system
+3) make a language translation system, similar to LingQ
