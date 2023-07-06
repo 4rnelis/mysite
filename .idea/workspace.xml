@@ -9,14 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fb1fe73-03bf-40be-a74c-39d491dcc901" name="Changes" comment="Project added">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/notes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/notes.txt" afterDir="false" />
-    </list>
+    <list default="true" id="9fb1fe73-03bf-40be-a74c-39d491dcc901" name="Changes" comment="Added en Passant, castling and pawn promotion to chess" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -254,7 +247,7 @@
       <workItem from="1688477407802" duration="5345000" />
       <workItem from="1688538753828" duration="22004000" />
       <workItem from="1688579999625" duration="18971000" />
-      <workItem from="1688642973611" duration="8455000" />
+      <workItem from="1688642973611" duration="9083000" />
     </task>
     <task id="LOCAL-00001" summary="Project added">
       <created>1688634340582</created>
@@ -263,7 +256,14 @@
       <option name="project" value="LOCAL" />
       <updated>1688634340582</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added en Passant, castling and pawn promotion to chess">
+      <created>1688673538392</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1688673538392</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -271,6 +271,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Project added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Project added" />
+    <MESSAGE value="Added en Passant, castling and pawn promotion to chess" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added en Passant, castling and pawn promotion to chess" />
   </component>
 </project>
