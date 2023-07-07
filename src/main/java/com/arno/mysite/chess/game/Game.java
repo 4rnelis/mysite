@@ -1,10 +1,9 @@
 package com.arno.mysite.chess.game;
 
-import com.arno.mysite.chess.game.GUI.GamePanel;
+import com.arno.mysite.chess.GUI.GamePanel;
 
 import javax.swing.*;
 
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,7 +16,7 @@ public class Game {
 
     public Game() {
         players = new ArrayList<>();
-        board = new Board(new InputStreamReader(System.in));
+        board = new Board();
         this.isRunning = false;
         sc = new Scanner(System.in);
     }

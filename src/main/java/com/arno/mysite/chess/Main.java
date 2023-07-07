@@ -1,4 +1,6 @@
-package com.arno.mysite.chess.game;
+package com.arno.mysite.chess;
+
+import com.arno.mysite.chess.game.Game;
 
 public class Main {
     public static void main(String[] args) {

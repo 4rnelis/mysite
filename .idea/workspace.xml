@@ -9,7 +9,51 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fb1fe73-03bf-40be-a74c-39d491dcc901" name="Changes" comment="Added en Passant, castling and pawn promotion to chess" />
+    <list default="true" id="9fb1fe73-03bf-40be-a74c-39d491dcc901" name="Changes" comment="Added en Passant, castling and pawn promotion to chess">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/bishop_black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/bishop_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/king_black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/king_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/knight_black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/knight_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/pawn_black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/pawn_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/queen_black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/queen_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/rook_black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/images/rook_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/GUI/GamePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/bishop_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/bishop_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/king_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/king_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/knight_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/knight_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/pawn_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/pawn_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/queen_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/queen_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/rook_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/GUI/images/rook_white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/notes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/arno/mysite/chess/game/notes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/bishop_black.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/bishop_black.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/bishop_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/bishop_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/king_black.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/king_black.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/king_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/king_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/knight_black.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/knight_black.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/knight_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/knight_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/pawn_black.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/pawn_black.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/pawn_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/pawn_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/queen_black.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/queen_black.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/queen_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/queen_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/rook_black.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/rook_black.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/rook_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/images/rook_white.png" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +69,19 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="2ab36e0a-beb0-4b9d-8888-8e3d93c0689d" />
+        <option name="url" value="https://github.com/4rnelis/mysite.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -56,6 +113,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.arno.mysite.chess" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Game" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.arno.mysite.chess.game.Game" />
@@ -63,7 +125,7 @@
       <option name="VM_PARAMETERS" value="--module-path /Library/Java/javafx-sdk-17.0.7/lib --add-modules javafx.controls,javafx.fxml " />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.arno.mysite.chess.game.*" />
+          <option name="PATTERN" value="com.arno.mysite.chess.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -72,12 +134,12 @@
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.arno.mysite.chess.game.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.arno.mysite.chess.Main" />
       <module name="mySite" />
       <option name="VM_PARAMETERS" value="--module-path /Library/Java/javafx-sdk-17.0.7/lib --add-modules javafx.controls,javafx.fxml " />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.arno.mysite.chess.game.*" />
+          <option name="PATTERN" value="com.arno.mysite.chess.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -247,7 +309,10 @@
       <workItem from="1688477407802" duration="5345000" />
       <workItem from="1688538753828" duration="22004000" />
       <workItem from="1688579999625" duration="18971000" />
-      <workItem from="1688642973611" duration="9083000" />
+      <workItem from="1688642973611" duration="12897000" />
+      <workItem from="1688736010734" duration="3799000" />
+      <workItem from="1688745452744" duration="4572000" />
+      <workItem from="1688758051132" duration="2507000" />
     </task>
     <task id="LOCAL-00001" summary="Project added">
       <created>1688634340582</created>
@@ -263,11 +328,29 @@
       <option name="project" value="LOCAL" />
       <updated>1688673538392</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added en Passant, castling and pawn promotion to chess">
+      <created>1688673743946</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1688673743946</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Project added" />

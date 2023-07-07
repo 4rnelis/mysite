@@ -1,8 +1,6 @@
 package com.arno.mysite.chess.game;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -25,9 +23,9 @@ public class Board {
     private boolean castling;
     private boolean pawnCrossed;
 
-    Reader bufferedReader;
+    private final PipedWriter pipedWriter;
 
-    public Board(Reader reader) {
+    public Board() {
         this.pieces = new ArrayList<>();
         boardPlacement = new Piece[WIDTH][HEIGHT];
         createPieces();
@@ -41,7 +39,7 @@ public class Board {
 
         this.turn = 0;
 
-        bufferedReader = new BufferedReader(reader);
+        pipedWriter = new PipedWriter();
     }
 
     /**
@@ -86,11 +84,6 @@ public class Board {
         blackMated = isMated('B');
         whiteChecked = isChecked('W');
         whiteMated = isMated('W');
-
-        System.out.println("BC: " + blackChecked);
-        System.out.println("BM: " + blackMated);
-        System.out.println("WC: " + whiteChecked);
-        System.out.println("WM: " + whiteMated);
 
         turn++;
         System.out.println(turn);
@@ -183,13 +176,19 @@ public class Board {
                                     piece.setPosY(newY);
                                 }
 
-                                if (tempPawnCrossed) {
-                                    System.out.println("Choose Pawn Promotion!");
-                                    try {
-                                        promotePawn(piece, (char) bufferedReader.read());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                                //Requires extra input from player
+                                try {
+                                    if (!force) {
+                                        if (tempPawnCrossed) {
+                                            pipedWriter.write(1);
+                                            pipedWriter.flush();
+                                        } else {
+                                            pipedWriter.write(0);
+                                            pipedWriter.flush();
+                                        }
                                     }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
                                 if (!force) {
@@ -205,6 +204,12 @@ public class Board {
                     }
                 }
             }
+        }
+        try {
+            pipedWriter.write(0);
+            pipedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         System.out.println("INVALID MOVE!");
     }
@@ -309,7 +314,6 @@ public class Board {
 
 
         if (isChecked(piece.getRole())) {
-            System.out.println("CHECKED!");
             setPiece(newX, newY, x, y, true);
             if (index != -1 && tempPiece != null) {
                 boardPlacement[newX][newY] = tempPiece;
@@ -899,12 +903,10 @@ public class Board {
                             x--;
                         }
                         if (((x != newX || y != newY) && getPiece(x, y) != null) || checkIfSquareIsChecked(x, y, piece.getOpposingRole())) {
-                            System.out.println("FALSE");
                             return false;
                         }
                     }
                     castling = true;
-                    System.out.println("Castling!");
                     return true;
                 }
             }
@@ -945,7 +947,6 @@ public class Board {
                         }
                     }
                     castling = true;
-                    System.out.println("Castling!");
                     return true;
                 }
             }
@@ -1037,12 +1038,10 @@ public class Board {
                     x--;
                 }
                 if (((x != newX || y != newY) && getPiece(x, y) != null) || checkIfSquareIsChecked(x, y, piece.getOpposingRole())) {
-                    System.out.println("FALSE");
                     return false;
                 }
             }
             castling = true;
-            System.out.println("Castling!");
             return true;
         }
 
@@ -1063,7 +1062,6 @@ public class Board {
                 }
             }
             castling = true;
-            System.out.println("Castling!");
             return true;
         }
 
@@ -1111,13 +1109,32 @@ public class Board {
         piece2.setMoved(true);
     }
 
-    public void promotePawn(Piece piece, char pieceName) {
-        switch (pieceName) {
-            case 'R' -> piece.setName(Pieces.ROOK);
-            case 'B' -> piece.setName(Pieces.BISHOP);
-            case 'K' -> piece.setName(Pieces.KNIGHT);
-            case 'Q' -> piece.setName(Pieces.QUEEN);
+    public Piece promotePawn(char pieceName, char role) {
+        for (Piece piece : pieces) {
+            if (piece != null && piece.getName() == Pieces.PAWN && piece.getRole() == role) {
+                if (role == 'B' && piece.getPosY() == Board.HEIGHT-1) {
+                    switch (pieceName) {
+                        case 'R' -> piece.setName(Pieces.ROOK);
+                        case 'B' -> piece.setName(Pieces.BISHOP);
+                        case 'K' -> piece.setName(Pieces.KNIGHT);
+                        case 'Q' -> piece.setName(Pieces.QUEEN);
+                    }
+                    updatePlacement();
+                    return piece;
+                }
+                if (role == 'W' && piece.getPosY() == 0) {
+                    switch (pieceName) {
+                        case 'R' -> piece.setName(Pieces.ROOK);
+                        case 'B' -> piece.setName(Pieces.BISHOP);
+                        case 'K' -> piece.setName(Pieces.KNIGHT);
+                        case 'Q' -> piece.setName(Pieces.QUEEN);
+                    }
+                    updatePlacement();
+                    return piece;
+                }
+            }
         }
+        return null;
     }
 
     public Piece[][] getBoardPlacement() {
@@ -1142,5 +1159,9 @@ public class Board {
 
     public boolean isWhiteMated() {
         return whiteMated;
+    }
+
+    public PipedWriter getPipedWriter() {
+        return pipedWriter;
     }
 }

@@ -3,3 +3,6 @@ To do:
 2) implement en Passant (setPiece or determine move flags) //DONE!
 3) implement pawn change upon crossing the board //DONE!
 4) implement draw
+
+Issues
+Pressing on the sidebar too fast causes crashes
